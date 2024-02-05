@@ -19,8 +19,15 @@ app.get('/', (re, res) =>{
   return res.json("Connection Established");
 })
 
-app.get('/topfive', (req, res) => {
-  db.query(process.env.TOP_FIVE, (err, data, fields)=> {
+app.get('/top_films', (req, res) => {
+  db.query(process.env.TOP_FIVE_FILMS, (err, data, fields)=> {
+    if(err) return res.json(err);
+    return res.json(data);
+  })
+})
+
+app.get('/top_actors', (req, res) => {
+  db.query(process.env.TOP_FIVE_ACTORS, (err, data, fields)=> {
     if(err) return res.json(err);
     return res.json(data);
   })
