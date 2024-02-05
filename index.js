@@ -3,31 +3,29 @@ const app = express();
 const cors = require('cors');
 const mysql = require('mysql2');
 require('dotenv').config();
-
+app.use(cors());
 console.log(process.env);
 
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PWD,
   database: process.env.DB_NAME
 })
 
-connection.connect();
+db.connect();
 
-connection.query('select category.name, COUNT(*) from category, film_category where film_category.category_id=category.category_id group by category.name;', (err, data, fields) => {
-  if (err) throw err
+app.get('/', (re, res) =>{
+  return res.json("Connection Established");
+})
 
-  console.log(data);
-});
+app.get('/topfive', (req, res) => {
+  db.query(process.env.TOP_FIVE, (err, data, fields)=> {
+    if(err) return res.json(err);
+    return res.json(data);
+  })
+})
 
-connection.end();
-
-
-app.get('/', (req, res) => {
-    res.send('Hello from our server!')
-});
-
-app.listen(8080, () => {
-      console.log('server listening on port 8080')
+app.listen(8000, () => {
+      console.log('server listening on port 8000')
 });
