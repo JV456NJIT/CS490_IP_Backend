@@ -34,6 +34,20 @@ app.get('/top_actors', (req, res) => {
   })
 })
 
+app.get('/film/:title', (req, res) => {
+  db.query(process.env.FILM_DESCRIPTION, [req.params.title], (err, data, fields)=> {
+    if(err) return res.json(err);
+    return res.json(data);
+  })
+})
+
+app.get('/actor/:actor', (req, res) => {
+  db.query(process.env.ACTOR_TOP_FILMS, [req.params.actor], (err, data, fields)=> {
+    if(err) return res.json(err);
+    return res.json(data);
+  })
+})
+
 app.listen(8000, () => {
       console.log('server listening on port 8000')
 });
