@@ -48,6 +48,19 @@ app.get('/actor/:actor', (req, res) => {
   })
 })
 
+app.get('/films/:title&:actorFirst&:actorLast&:genre', (req, res) => {
+  if(req.params.title=='null') req.params.title="%";
+  if(req.params.actorFirst=='null') req.params.actorFirst="%";
+  if(req.params.actorLast=='null') req.params.actorLast="%";
+  if(req.params.genre=='null') req.params.genre="%";
+  console.log(req.params);
+  db.query(process.env.FILM_SEARCH, ["%" + req.params.title + "%", "%" + req.params.actorFirst + "%", 
+                                      "%" + req.params.actorLast + "%", "%" + req.params.genre + "%"],(err, data, fields)=> {
+    if(err) return res.json(err);
+    return res.json(data);
+  });
+})
+
 app.listen(8000, () => {
       console.log('server listening on port 8000')
 });
